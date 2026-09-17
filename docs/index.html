@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PAYG Ops Copilot — Prototype</title>
   <style>
-    :root { --bg:#f7f7f4; --card:#ffffff; --ink:#1f2937; --muted:#667085; --line:#e5e7eb; --accent:#f4b400; --warn:#fff7df; }
+    :root { --bg:#f7f7f4; --card:#ffffff; --ink:#1f2937; --muted:#667085; --line:#e5e7eb; --accent:#f4b400; --warn:#fff7df; --soft:#f9fafb; }
     *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
     .wrap{max-width:1050px;margin:0 auto;padding:32px 20px 64px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
     h1{margin:0 0 6px;font-size:32px}.sub{color:var(--muted);margin:0}.badge{background:#fff2bd;border:1px solid #efd267;padding:8px 10px;border-radius:8px;font-size:13px}
     .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
     label{font-weight:700;font-size:14px;display:block;margin:12px 0 6px}textarea,select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px;font:inherit;background:#fff}
     textarea{min-height:130px;resize:vertical}button{margin-top:14px;background:#1f2937;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:700;cursor:pointer}
+    .helper{font-size:12px;color:var(--muted);margin:6px 0 0}.scenario-box{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:12px;margin:12px 0 6px}
     .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{border:1px solid var(--line);border-radius:8px;padding:12px}.metric b{display:block;font-size:20px;margin-top:5px}.small{font-size:12px;color:var(--muted)}
     .out{margin-top:16px;display:none}.row{border-top:1px solid var(--line);padding:10px 0}.row:first-child{border-top:0}.k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.v{margin-top:4px}
     .warning{background:var(--warn);border:1px solid #efd267;padding:10px;border-radius:8px;margin-top:10px}.section{margin-top:18px}.section h2{font-size:20px;margin:0 0 10px}.flow{font-family:monospace;background:#111827;color:#f9fafb;padding:14px;border-radius:8px;white-space:pre-wrap;font-size:13px}
@@ -25,6 +26,27 @@
   <div class="grid">
     <section class="card">
       <h2>1. Triage an incoming message</h2>
+
+      <div class="scenario-box">
+        <label for="scenario" style="margin-top:0">Try a sample situation</label>
+        <select id="scenario" onchange="loadScenario()">
+          <option value="payment_missing">Payment not reflected + no unlock code</option>
+          <option value="unlock_invalid">Unlock code received but invalid</option>
+          <option value="device_fault">Solar system stopped charging</option>
+          <option value="safety_issue">Battery smoke / safety concern</option>
+          <option value="installation_delay">Technician did not arrive</option>
+          <option value="profile_change">Customer wants phone number changed</option>
+          <option value="balance_query">Customer asks for remaining balance</option>
+          <option value="cash_dispute">Cash paid to agent but not recorded</option>
+          <option value="suspected_fraud">Customer suspects a fake agent / scam</option>
+          <option value="warranty_request">Battery failed again; warranty request</option>
+          <option value="delivery_issue">Delivery missing a component</option>
+          <option value="agent_access">Field agent cannot log in to app</option>
+          <option value="repeat_failure">Product failed repeatedly after service</option>
+        </select>
+        <p class="helper">Selecting a situation fills the market, channel and message. You can edit the message before triaging it.</p>
+      </div>
+
       <label for="market">Market</label>
       <select id="market"><option>Kenya</option><option>Uganda</option><option>Nigeria</option><option>Tanzania</option><option>Myanmar</option></select>
       <label for="channel">Channel</label>
@@ -67,24 +89,102 @@
   <p class="foot">This browser demo uses simple deterministic rules so a reviewer can test it without API credentials. The repository also includes an optional LLM API implementation, SQL, tests, PRD, product brief and rollout plan.</p>
 </main>
 <script>
+const scenarios={
+  payment_missing:{market:'Kenya',channel:'WhatsApp',message:'Customer says: I paid by mobile money this morning but the payment is not showing and I did not receive the unlock code.'},
+  unlock_invalid:{market:'Uganda',channel:'Call notes',message:'Customer says the payment went through and an unlock code was received, but the code is showing invalid on the keypad and the system is still locked.'},
+  device_fault:{market:'Tanzania',channel:'WhatsApp',message:'Customer says the solar system stopped charging yesterday. The panel is in sunlight but the battery level stays at zero and there is no power at night.'},
+  safety_issue:{market:'Kenya',channel:'Call notes',message:'Customer reports that the battery became very hot and started producing smoke. They have switched the system off and are worried it may catch fire.'},
+  installation_delay:{market:'Nigeria',channel:'Ticketing tool',message:'Customer says installation was booked for yesterday, but the technician did not arrive and nobody called to reschedule. The customer has already paid the deposit.'},
+  profile_change:{market:'Kenya',channel:'Email',message:'Customer says the phone number linked to the account is no longer active and asks support to replace it with a new number so payment messages go to the correct phone.'},
+  balance_query:{market:'Uganda',channel:'WhatsApp',message:'Customer asks how much balance is left on the payment plan, what the next installment amount is, and when the next payment is due.'},
+  cash_dispute:{market:'Nigeria',channel:'Agent app',message:'Customer says they gave cash to a field agent two days ago and received a handwritten receipt, but the payment is still missing from the account and the product remains locked.'},
+  suspected_fraud:{market:'Kenya',channel:'WhatsApp',message:'Customer says a person claiming to be a Sun King agent asked them to send money to a personal mobile number. The customer suspects it may be a scam and wants the agent verified.'},
+  warranty_request:{market:'Uganda',channel:'Ticketing tool',message:'Customer says the battery was repaired last month but it has stopped working again. They want to know whether it is still under warranty and whether a replacement can be arranged.'},
+  delivery_issue:{market:'Tanzania',channel:'Email',message:'Customer received the solar kit today, but the package is missing the charging cable and one light. They want the missing items delivered.'},
+  agent_access:{market:'Myanmar',channel:'Agent app',message:'Field agent says they cannot log in to the agent app after changing phones. OTP verification keeps failing and they cannot register today\'s customer payments.'},
+  repeat_failure:{market:'Nigeria',channel:'Call notes',message:'Customer says the solar unit has failed for the third time even after two technician visits. They are frustrated and want the issue permanently resolved.'}
+};
+
+function loadScenario(){
+  const s=scenarios[document.getElementById('scenario').value];
+  if(!s)return;
+  document.getElementById('market').value=s.market;
+  document.getElementById('channel').value=s.channel;
+  document.getElementById('message').value=s.message;
+  document.getElementById('out').style.display='none';
+}
+
 function hasAny(t, xs){return xs.some(x=>t.includes(x))}
 function triage(){
   const raw=document.getElementById('message').value.trim(); const t=raw.toLowerCase();
   let cat='Other / needs review', pri='Medium', owner='Customer Operations', human=true;
   let action='Ask one clarifying question, then route to the relevant operations owner. Do not take account-changing action automatically.';
-  if(hasAny(t,['fraud','stolen','agent took','cash missing','scam'])){cat='Payment / risk concern';pri='Urgent';owner='Risk / Operations';human=true;action='Pause automation, preserve the case details, and escalate for human investigation.'}
-  else if(hasAny(t,['payment','paid','m-pesa','mpesa','mobile money','cash']) && hasAny(t,['not showing','not reflect','not updated','still locked','missing','code'])){cat='Payment not reflected';pri='High';owner='Payments / Customer Operations';human=true;action='Check the transaction reference and payment ledger. Confirm whether the payment posted. Only then resend/regenerate any access code.'}
-  else if(hasAny(t,['unlock','code','token','keypad']) && hasAny(t,['not received','invalid','not working','no code'])){cat='Unlock code issue';pri='High';owner='Payments / Customer Operations';human=true;action='Verify the latest successful payment and code status, then resend a valid code or escalate generation failure.'}
-  else if(hasAny(t,['solar','battery','panel','light','device','system']) && hasAny(t,['not working','stopped','broken','no power','not charging'])){cat='Device / product issue';pri='Medium';owner='Service Operations';human=false;action='Run basic troubleshooting, verify service/warranty status, and create a technician visit if unresolved.'}
-  else if(hasAny(t,['install','technician','service','visit']) && hasAny(t,['delay','waiting','did not come','pending','reschedule'])){cat='Installation / service delay';pri='Medium';owner='Field Service Operations';human=false;action='Check appointment status, propose the next available slot, and alert the field coordinator if overdue.'}
-  else if(hasAny(t,['agent','app','login','otp','password','sync']) && hasAny(t,['cannot','failed','locked','error','unable','not'])){cat='Agent app / access issue';pri='Medium';owner='Internal Tools Support';human=false;action='Validate agent account status, attempt approved recovery, and escalate persistent authentication or sync errors.'}
-  else if(hasAny(t,['phone','number','name','contact','details']) && hasAny(t,['change','update','wrong','new'])){cat='Customer details update';pri='Medium';owner='Customer Operations';human=true;action='Verify customer identity using the approved process before changing profile data.'}
-  else if(hasAny(t,['balance','remaining','installment','instalment','payoff','due'])){cat='Payment plan / balance query';pri='Low';owner='Customer Support';human=false;action='Retrieve verified balance and payment-plan data, then explain the next amount/date in simple language.'}
+  let reply='Thanks for reporting this. I have captured the issue and routed it to the right team. We will first verify the relevant account or payment details before making any changes.';
+
+  if(hasAny(t,['smoke','fire','burning','sparks','very hot','overheating'])){
+    cat='Product safety issue';pri='Urgent';owner='Safety / Service Operations';human=true;
+    action='Tell the customer to stop using the product, keep a safe distance if needed, and escalate immediately to the safety/service team for verified next steps.';
+    reply='Thank you for reporting this. Please stop using the system and keep it switched off. I am escalating this as a safety issue so the service team can contact you with the next safe step.';
+  }
+  else if(hasAny(t,['fraud','stolen','agent took','cash missing','scam','personal mobile number','fake agent'])){
+    cat='Payment / risk concern';pri='Urgent';owner='Risk / Operations';human=true;
+    action='Pause automation, preserve the case details and payment evidence, verify the agent/account, and escalate for human investigation.';
+    reply='Thank you for flagging this. Please do not send any additional money until the details are verified. I have escalated the case for human review.';
+  }
+  else if(hasAny(t,['payment','paid','m-pesa','mpesa','mobile money','cash','deposit']) && hasAny(t,['not showing','not reflect','not updated','still locked','missing','no unlock','did not receive'])){
+    cat='Payment not reflected';pri='High';owner='Payments / Customer Operations';human=true;
+    action='Check the transaction reference and payment ledger. Confirm whether the payment posted. Only then resend or regenerate any access code.';
+  }
+  else if(hasAny(t,['unlock','code','token','keypad']) && hasAny(t,['not received','invalid','not working','no code','still locked'])){
+    cat='Unlock code issue';pri='High';owner='Payments / Customer Operations';human=true;
+    action='Verify the latest successful payment and code status, then resend a valid code or escalate generation failure.';
+  }
+  else if(hasAny(t,['battery','solar','panel','light','device','system','unit']) && hasAny(t,['third time','again','repeated','two technician'])){
+    cat='Repeat product failure';pri='High';owner='Service Operations';human=true;
+    action='Review prior service history, avoid repeating the same troubleshooting path, and assign a human owner to decide repair versus replacement.';
+    reply='I can see this is a repeat issue. The case should be reviewed with the previous service history so the team can decide the next corrective action instead of repeating the same steps.';
+  }
+  else if(hasAny(t,['battery','solar','panel','light','device','system','unit']) && hasAny(t,['not working','stopped','broken','no power','not charging','zero'])){
+    cat='Device / product issue';pri='Medium';owner='Service Operations';human=false;
+    action='Run basic troubleshooting, verify service/warranty status, and create a technician visit if unresolved.';
+  }
+  else if(hasAny(t,['warranty','replacement','replace']) && hasAny(t,['battery','device','system','repair','working'])){
+    cat='Warranty / replacement request';pri='Medium';owner='Service Operations';human=true;
+    action='Verify warranty eligibility and previous repair history before approving any replacement or service commitment.';
+  }
+  else if(hasAny(t,['delivery','package','kit']) && hasAny(t,['missing','not included','did not receive'])){
+    cat='Delivery / missing component';pri='Medium';owner='Logistics / Customer Operations';human=false;
+    action='Confirm the order contents and delivery record, then raise a fulfillment request for verified missing components.';
+    reply='Thanks for reporting the missing item. We will check the order and delivery record first, then arrange the next fulfillment step for any confirmed missing component.';
+  }
+  else if(hasAny(t,['install','technician','service','visit']) && hasAny(t,['delay','waiting','did not arrive','did not come','pending','reschedule'])){
+    cat='Installation / service delay';pri='Medium';owner='Field Service Operations';human=false;
+    action='Check appointment status, propose the next available slot, and alert the field coordinator if overdue.';
+  }
+  else if(hasAny(t,['agent','app','login','otp','password','sync']) && hasAny(t,['cannot','failed','locked','error','unable','not'])){
+    cat='Agent app / access issue';pri='Medium';owner='Internal Tools Support';human=false;
+    action='Validate agent account status, attempt approved recovery, and escalate persistent authentication or sync errors.';
+  }
+  else if(hasAny(t,['phone','number','name','contact','details']) && hasAny(t,['change','update','wrong','new','replace'])){
+    cat='Customer details update';pri='Medium';owner='Customer Operations';human=true;
+    action='Verify customer identity using the approved process before changing profile data.';
+    reply='I can help route this request, but the account owner must first be verified before any contact details are changed.';
+  }
+  else if(hasAny(t,['balance','remaining','installment','instalment','payoff','due','next payment'])){
+    cat='Payment plan / balance query';pri='Low';owner='Customer Support';human=false;
+    action='Retrieve verified balance and payment-plan data, then explain the next amount and date in simple language.';
+    reply='I can help with that. The next step is to retrieve the verified payment-plan details and then confirm the remaining balance, next amount and due date.';
+  }
+
   document.getElementById('summary').textContent=raw.length>180?raw.slice(0,180)+'…':raw;
-  document.getElementById('category').textContent=cat; document.getElementById('priority').textContent=pri; document.getElementById('owner').textContent=owner; document.getElementById('action').textContent=action;
-  document.getElementById('reply').textContent='Thanks for reporting this. I have captured the issue and routed it to the right team. We will first verify the relevant account or payment details before making any changes.';
-  document.getElementById('review').textContent=human?'Human review required before sensitive or account-changing action.':'Copilot suggestion can be reviewed and accepted by the support user.';
+  document.getElementById('category').textContent=cat;
+  document.getElementById('priority').textContent=pri;
+  document.getElementById('owner').textContent=owner;
+  document.getElementById('action').textContent=action;
+  document.getElementById('reply').textContent=reply;
+  document.getElementById('review').textContent=human?'Human review required before sensitive, safety, financial or account-changing action.':'Copilot suggestion can be reviewed and accepted by the support user.';
   document.getElementById('out').style.display='block';
 }
+loadScenario();
 triage();
 </script></body></html>
