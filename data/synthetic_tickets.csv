@@ -1,0 +1,81 @@
+ticket_id,market,channel,message,category,priority,status,resolution_hours,ai_used,human_override,synthetic
+SYN-0001,Kenya,Email,OTP is not arriving and the agent is unable to access the account.,Agent app / access issue,Medium,Resolved,9.6,0,0,True
+SYN-0002,Tanzania,WhatsApp,I paid by mobile money this morning but the payment is not showing on the account.,Payment not reflected,High,Resolved,6.7,1,0,True
+SYN-0003,Myanmar,Call notes,Technician did not come for the scheduled installation visit.,Installation / service delay,Medium,Resolved,8.8,1,0,True
+SYN-0004,Nigeria,Ticketing tool,Customer says the lights are off although the system was charged.,Device / product issue,Medium,Open,0.0,1,0,True
+SYN-0005,Nigeria,Agent app,M-Pesa payment completed but the product is still locked.,Payment not reflected,High,In Progress,0.0,1,0,True
+SYN-0006,Tanzania,WhatsApp,Agent says the customer is unhappy and needs support.,Other / needs review,Medium,In Progress,0.0,1,0,True
+SYN-0007,Kenya,WhatsApp,Customer says an agent took cash but it is missing from the account. Please investigate.,Payment not reflected,Urgent,In Progress,0.0,0,0,True
+SYN-0008,Kenya,Call notes,Customer asks whether they can pay off the remaining balance early.,Payment plan / balance query,Low,Resolved,8.5,0,0,True
+SYN-0009,Nigeria,Ticketing tool,M-Pesa payment completed but the product is still locked.,Payment not reflected,High,In Progress,0.0,1,1,True
+SYN-0010,Myanmar,Ticketing tool,OTP is not arriving and the agent is unable to access the account.,Agent app / access issue,Medium,Resolved,9.0,1,0,True
+SYN-0011,Kenya,Ticketing tool,Payment went through but customer did not receive the unlock code.,Unlock code issue,High,In Progress,0.0,1,1,True
+SYN-0012,Myanmar,Email,Please help with this customer case urgently.,Other / needs review,Medium,In Progress,0.0,1,0,True
+SYN-0013,Nigeria,Ticketing tool,Customer says the lights are off although the system was charged.,Device / product issue,Medium,In Progress,0.0,1,0,True
+SYN-0014,Myanmar,Call notes,Panel appears connected but the device is not powering on.,Device / product issue,Medium,Resolved,17.9,0,0,True
+SYN-0015,Kenya,WhatsApp,Customer has been waiting three days for the installer and no one has called.,Installation / service delay,Medium,Resolved,12.8,1,0,True
+SYN-0016,Tanzania,Agent app,Please reschedule the service visit; the customer is still waiting.,Installation / service delay,Medium,Open,0.0,0,0,True
+SYN-0017,Kenya,Agent app,M-Pesa payment completed but the product is still locked.,Payment not reflected,High,In Progress,0.0,1,0,True
+SYN-0018,Kenya,Email,Nimelipa kwa mobile money lakini malipo bado hayaonekani kwenye account.,Payment not reflected,High,In Progress,0.0,1,0,True
+SYN-0019,Myanmar,Agent app,OTP is not arriving and the agent is unable to access the account.,Agent app / access issue,Medium,Resolved,14.5,1,0,True
+SYN-0020,Myanmar,WhatsApp,Customer wants the registered name corrected.,Customer details update,Medium,Resolved,12.5,0,0,True
+SYN-0021,Uganda,WhatsApp,How much is left to finish the EasyBuy payment plan?,Payment plan / balance query,Low,Open,0.0,0,0,True
+SYN-0022,Tanzania,WhatsApp,Nimelipa kwa mobile money lakini malipo bado hayaonekani kwenye account.,Payment not reflected,High,In Progress,0.0,1,0,True
+SYN-0023,Nigeria,Agent app,Installation is pending even though the deposit was paid.,Installation / service delay,Medium,Open,0.0,0,0,True
+SYN-0024,Uganda,Email,Need to update contact details because the old number is no longer active.,Customer details update,Medium,Open,0.0,1,0,True
+SYN-0025,Kenya,Ticketing tool,Technician did not come for the scheduled installation visit.,Installation / service delay,Medium,Resolved,12.1,1,0,True
+SYN-0026,Kenya,WhatsApp,Customer has been waiting three days for the installer and no one has called.,Installation / service delay,Medium,Resolved,15.7,1,0,True
+SYN-0027,Uganda,Agent app,OTP is not arriving and the agent is unable to access the account.,Agent app / access issue,Medium,In Progress,0.0,0,0,True
+SYN-0028,Uganda,Call notes,Installation is pending even though the deposit was paid.,Installation / service delay,Medium,Resolved,6.1,1,0,True
+SYN-0029,Tanzania,WhatsApp,Solar system stopped working last night and the battery is not charging.,Device / product issue,Medium,Resolved,9.1,1,0,True
+SYN-0030,Uganda,Call notes,Technician did not come for the scheduled installation visit.,Installation / service delay,Medium,Resolved,3.8,1,0,True
+SYN-0031,Myanmar,WhatsApp,Solar system stopped working last night and the battery is not charging.,Device / product issue,Medium,In Progress,0.0,1,1,True
+SYN-0032,Uganda,Ticketing tool,Agent reports customer paid cash but the payment has not updated yet.,Payment not reflected,High,Resolved,15.1,1,0,True
+SYN-0033,Nigeria,Call notes,Customer says an agent took cash but it is missing from the account. Please investigate.,Payment not reflected,Urgent,Resolved,9.4,0,0,True
+SYN-0034,Myanmar,Call notes,Please help with this customer case urgently.,Other / needs review,Medium,Resolved,10.2,1,1,True
+SYN-0035,Kenya,Agent app,Unlock token is not working even after entering it twice.,Unlock code issue,High,Resolved,15.7,0,0,True
+SYN-0036,Myanmar,WhatsApp,Customer says money was sent yesterday and the system still shows overdue.,Payment not reflected,High,Resolved,22.9,1,0,True
+SYN-0037,Myanmar,Agent app,Customer has been waiting three days for the installer and no one has called.,Installation / service delay,Medium,Resolved,12.9,1,0,True
+SYN-0038,Nigeria,Ticketing tool,Please reschedule the service visit; the customer is still waiting.,Installation / service delay,Medium,Resolved,5.9,1,0,True
+SYN-0039,Kenya,WhatsApp,Need to update contact details because the old number is no longer active.,Customer details update,Medium,In Progress,0.0,1,1,True
+SYN-0040,Myanmar,Email,Technician did not come for the scheduled installation visit.,Installation / service delay,Medium,Open,0.0,0,0,True
+SYN-0041,Nigeria,Email,How much is left to finish the EasyBuy payment plan?,Payment plan / balance query,Low,Resolved,6.6,1,0,True
+SYN-0042,Myanmar,WhatsApp,Agent says the customer is unhappy and needs support.,Other / needs review,Medium,Open,0.0,1,0,True
+SYN-0043,Kenya,Agent app,The code sent to the customer is showing invalid on the keypad.,Unlock code issue,High,Resolved,7.8,1,0,True
+SYN-0044,Tanzania,Email,Payment went through but customer did not receive the unlock code.,Unlock code issue,High,Resolved,9.2,1,0,True
+SYN-0045,Uganda,Email,Customer says money was sent yesterday and the system still shows overdue.,Payment not reflected,High,In Progress,0.0,1,0,True
+SYN-0046,Kenya,Ticketing tool,Nimelipa kwa mobile money lakini malipo bado hayaonekani kwenye account.,Payment not reflected,High,Resolved,9.8,1,1,True
+SYN-0047,Kenya,Email,Customer says the lights are off although the system was charged.,Device / product issue,Medium,In Progress,0.0,1,0,True
+SYN-0048,Tanzania,Agent app,Technician did not come for the scheduled installation visit.,Installation / service delay,Medium,Open,0.0,1,0,True
+SYN-0049,Uganda,Call notes,Customer changed phone number and wants the account contact updated.,Customer details update,Medium,Resolved,13.3,0,0,True
+SYN-0050,Tanzania,Ticketing tool,Customer wants the registered name corrected.,Customer details update,Medium,Resolved,9.0,1,0,True
+SYN-0051,Tanzania,Email,Clinic solar system stopped working and there is no power for the medicine refrigerator.,Device / product issue,High,In Progress,0.0,0,0,True
+SYN-0052,Uganda,Call notes,Customer says no code arrived after payment.,Unlock code issue,High,Resolved,9.4,1,0,True
+SYN-0053,Myanmar,Call notes,Customer says no code arrived after payment.,Unlock code issue,High,Open,0.0,1,0,True
+SYN-0054,Nigeria,WhatsApp,I paid by mobile money this morning but the payment is not showing on the account.,Payment not reflected,High,Resolved,9.1,1,0,True
+SYN-0055,Myanmar,Ticketing tool,M-Pesa payment completed but the product is still locked.,Payment not reflected,High,Resolved,21.1,1,0,True
+SYN-0056,Uganda,Email,Please confirm the next weekly installment amount.,Payment plan / balance query,Low,Resolved,4.2,1,0,True
+SYN-0057,Nigeria,Agent app,Customer wants the registered name corrected.,Customer details update,Medium,In Progress,0.0,1,0,True
+SYN-0058,Uganda,Call notes,Installation is pending even though the deposit was paid.,Installation / service delay,Medium,In Progress,0.0,0,0,True
+SYN-0059,Nigeria,Call notes,Agent cannot log in to the app after changing phones.,Agent app / access issue,Medium,Resolved,7.3,1,0,True
+SYN-0060,Nigeria,Call notes,Password reset failed and the agent is locked out.,Agent app / access issue,Medium,Resolved,10.9,0,0,True
+SYN-0061,Uganda,WhatsApp,Customer wants the registered name corrected.,Customer details update,Medium,Resolved,13.9,1,0,True
+SYN-0062,Uganda,Email,How much is left to finish the EasyBuy payment plan?,Payment plan / balance query,Low,In Progress,0.0,1,1,True
+SYN-0063,Myanmar,WhatsApp,There is an issue after yesterday. Please check.,Other / needs review,Medium,Resolved,8.4,1,0,True
+SYN-0064,Kenya,WhatsApp,Unlock token is not working even after entering it twice.,Unlock code issue,High,Resolved,11.7,0,0,True
+SYN-0065,Tanzania,WhatsApp,OTP is not arriving and the agent is unable to access the account.,Agent app / access issue,Medium,Open,0.0,1,0,True
+SYN-0066,Myanmar,Agent app,Panel appears connected but the device is not powering on.,Device / product issue,Medium,Open,0.0,0,0,True
+SYN-0067,Myanmar,Call notes,Password reset failed and the agent is locked out.,Agent app / access issue,Medium,Open,0.0,1,0,True
+SYN-0068,Uganda,Email,Unlock token is not working even after entering it twice.,Unlock code issue,High,In Progress,0.0,1,1,True
+SYN-0069,Nigeria,Email,Customer says no code arrived after payment.,Unlock code issue,High,Open,0.0,1,0,True
+SYN-0070,Uganda,Ticketing tool,Solar system stopped working last night and the battery is not charging.,Device / product issue,Medium,Resolved,8.1,1,0,True
+SYN-0071,Myanmar,WhatsApp,TV and lights stopped working from the solar system.,Device / product issue,Medium,Resolved,13.4,0,0,True
+SYN-0072,Tanzania,Call notes,The code sent to the customer is showing invalid on the keypad.,Unlock code issue,High,Resolved,13.2,1,0,True
+SYN-0073,Uganda,Call notes,Wrong phone number is saved on the customer profile. Please change it.,Customer details update,Medium,Open,0.0,1,0,True
+SYN-0074,Kenya,WhatsApp,Installation is pending even though the deposit was paid.,Installation / service delay,Medium,Resolved,14.0,1,1,True
+SYN-0075,Uganda,Call notes,Panel appears connected but the device is not powering on.,Device / product issue,Medium,Resolved,12.1,0,0,True
+SYN-0076,Kenya,Call notes,Solar system stopped working last night and the battery is not charging.,Device / product issue,Medium,In Progress,0.0,1,0,True
+SYN-0077,Kenya,WhatsApp,Payment went through but customer did not receive the unlock code.,Unlock code issue,High,Open,0.0,1,1,True
+SYN-0078,Uganda,Call notes,I paid by mobile money this morning but the payment is not showing on the account.,Payment not reflected,High,Resolved,11.3,1,0,True
+SYN-0079,Uganda,Agent app,Customer changed phone number and wants the account contact updated.,Customer details update,Medium,In Progress,0.0,1,0,True
+SYN-0080,Nigeria,Agent app,Installation is pending even though the deposit was paid.,Installation / service delay,Medium,Resolved,9.7,1,0,True
