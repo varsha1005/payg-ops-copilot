@@ -4,6 +4,9 @@
 Built as an independent case study for an Associate Product Manager — Digitization & Automation role.  
 **Candidate:** Varsha Panguluri
 
+**Live demo:** https://varsha1005.github.io/payg-ops-copilot/  
+**GitHub repository:** https://github.com/varsha1005/payg-ops-copilot
+
 > This project uses synthetic data only and is not an official Sun King product. Assumptions about internal workflows are hypotheses based on public information and the role description.
 
 ## The problem
