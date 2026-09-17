@@ -5,30 +5,68 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PAYG Ops Copilot — Prototype</title>
   <style>
-    :root { --bg:#f7f7f4; --card:#ffffff; --ink:#1f2937; --muted:#667085; --line:#e5e7eb; --accent:#f4b400; --warn:#fff7df; --soft:#f9fafb; }
-    *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
-    .wrap{max-width:1050px;margin:0 auto;padding:32px 20px 64px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
-    h1{margin:0 0 6px;font-size:32px}.sub{color:var(--muted);margin:0}.badge{background:#fff2bd;border:1px solid #efd267;padding:8px 10px;border-radius:8px;font-size:13px}
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
-    label{font-weight:700;font-size:14px;display:block;margin:12px 0 6px}textarea,select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px;font:inherit;background:#fff}
-    textarea{min-height:130px;resize:vertical}button{margin-top:14px;background:#1f2937;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:700;cursor:pointer}
-    .helper{font-size:12px;color:var(--muted);margin:6px 0 0}.scenario-box{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:12px;margin:12px 0 6px}
-    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{border:1px solid var(--line);border-radius:8px;padding:12px}.metric b{display:block;font-size:20px;margin-top:5px}.small{font-size:12px;color:var(--muted)}
-    .out{margin-top:16px;display:none}.row{border-top:1px solid var(--line);padding:10px 0}.row:first-child{border-top:0}.k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.v{margin-top:4px}
-    .warning{background:var(--warn);border:1px solid #efd267;padding:10px;border-radius:8px;margin-top:10px}.section{margin-top:18px}.section h2{font-size:20px;margin:0 0 10px}.flow{font-family:monospace;background:#111827;color:#f9fafb;padding:14px;border-radius:8px;white-space:pre-wrap;font-size:13px}
-    .foot{margin-top:28px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}.top{display:block}.badge{margin-top:12px}.metrics{grid-template-columns:1fr 1fr}}
+    :root{
+      --bg:#f6f5f1; --card:#ffffff; --ink:#1f2937; --muted:#667085;
+      --line:#e2e5e9; --soft:#f8f9fb; --accent:#f4b400; --warn:#fff6db;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+    .wrap{max-width:1120px;margin:0 auto;padding:34px 20px 64px}
+    .top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+    h1{font-size:32px;margin:0 0 5px}.sub{margin:0;color:var(--muted)}
+    .badge{font-size:13px;background:#fff2bd;border:1px solid #ead06f;border-radius:8px;padding:8px 11px;white-space:nowrap}
+    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:24px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+    .card h2{margin:0 0 12px;font-size:24px}
+    label{font-weight:700;font-size:14px;display:block;margin:0 0 6px}
+    select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:11px 12px;font:inherit;background:#fff}
+    .helper{font-size:12px;color:var(--muted);margin:7px 0 0}
+    .scenario-box{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:13px;margin-bottom:16px}
+    .case-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .info{border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:#fff}
+    .info .label,.metric .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+    .info .value{font-weight:700;margin-top:3px}
+    .message-card{border:1px solid var(--line);border-radius:9px;padding:14px;background:#fff;margin-top:10px;min-height:118px}
+    .message-card p{margin:6px 0 0;font-size:16px}
+    button{margin-top:14px;background:#1f2937;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:700;cursor:pointer}
+    button:hover{opacity:.92}
+    .out{margin-top:18px;display:none;border-top:1px solid var(--line);padding-top:8px}
+    .row{padding:10px 0;border-bottom:1px solid #edf0f2}.row:last-child{border-bottom:0}
+    .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.v{margin-top:4px}
+    .warning{background:var(--warn);border:1px solid #ead06f;padding:10px 12px;border-radius:8px;margin-top:10px}
+    .dashboard-title{font-size:14px;font-weight:700;margin:0 0 12px;color:#475467}
+    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .metric{border:1px solid var(--line);border-radius:9px;padding:12px;background:#fff}
+    .metric b{display:block;font-size:21px;margin-top:4px}
+    .section{margin-top:18px}.section h3{font-size:17px;margin:0 0 8px}
+    .metric-list{margin:0;padding-left:20px}.metric-list li{margin:6px 0}
+    .note{font-size:12px;color:var(--muted);margin-top:12px}
+    .handling{margin-top:18px}
+    .handling-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:12px}
+    .handling-head h2{margin:0;font-size:22px}.handling-head p{margin:0;color:var(--muted);font-size:13px}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .step{border:1px solid var(--line);border-radius:10px;background:#fff;padding:14px}
+    .step-no{font-size:12px;font-weight:700;color:#7a5b00;margin-bottom:7px}.step h3{font-size:15px;margin:0 0 6px}.step p{font-size:13px;color:#475467;margin:0}
+    .foot{margin-top:25px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.top{display:block}.badge{display:inline-block;margin-top:12px}}
+    @media(max-width:520px){.metrics,.case-meta,.steps{grid-template-columns:1fr}}
   </style>
 </head>
-<body><main class="wrap">
-  <div class="top"><div><h1>PAYG Ops Copilot</h1><p class="sub">AI-first support triage + operations workflow prototype</p></div><div class="badge">Independent case study · Synthetic data only</div></div>
+<body>
+<main class="wrap">
+  <div class="top">
+    <div>
+      <h1>PAYG Ops Copilot</h1>
+      <p class="sub">Support triage and operations prototype</p>
+    </div>
+    <div class="badge">Independent case study · Synthetic data</div>
+  </div>
 
   <div class="grid">
     <section class="card">
-      <h2>1. Triage an incoming message</h2>
-
+      <h2>1. Review a support situation</h2>
       <div class="scenario-box">
-        <label for="scenario" style="margin-top:0">Try a sample situation</label>
+        <label for="scenario">Situation</label>
         <select id="scenario" onchange="loadScenario()">
           <option value="payment_missing">Payment not reflected + no unlock code</option>
           <option value="unlock_invalid">Unlock code received but invalid</option>
@@ -44,147 +82,247 @@
           <option value="agent_access">Field agent cannot log in to app</option>
           <option value="repeat_failure">Product failed repeatedly after service</option>
         </select>
-        <p class="helper">Selecting a situation fills the market, channel and message. You can edit the message before triaging it.</p>
+        <p class="helper">Each option is a fixed synthetic case. Market, channel and message are shown exactly as received.</p>
       </div>
 
-      <label for="market">Market</label>
-      <select id="market"><option>Kenya</option><option>Uganda</option><option>Nigeria</option><option>Tanzania</option><option>Myanmar</option></select>
-      <label for="channel">Channel</label>
-      <select id="channel"><option>WhatsApp</option><option>Ticketing tool</option><option>Email</option><option>Call notes</option><option>Agent app</option></select>
-      <label for="message">Message</label>
-      <textarea id="message">Customer says: I paid by mobile money this morning but the payment is not showing and I did not receive the unlock code.</textarea>
-      <button onclick="triage()">Triage message</button>
+      <div class="case-meta">
+        <div class="info"><div class="label">Market</div><div class="value" id="marketText"></div></div>
+        <div class="info"><div class="label">Channel</div><div class="value" id="channelText"></div></div>
+      </div>
+      <div class="message-card">
+        <div class="label">Message</div>
+        <p id="messageText"></p>
+      </div>
+
+      <button onclick="reviewCase()">Review case</button>
+
       <div class="out" id="out">
-        <div class="row"><div class="k">Summary</div><div class="v" id="summary"></div></div>
         <div class="row"><div class="k">Category / priority</div><div class="v"><span id="category"></span> · <b id="priority"></b></div></div>
-        <div class="row"><div class="k">Owner</div><div class="v" id="owner"></div></div>
+        <div class="row"><div class="k">Suggested owner</div><div class="v" id="owner"></div></div>
         <div class="row"><div class="k">Recommended next action</div><div class="v" id="action"></div></div>
-        <div class="row"><div class="k">Draft response</div><div class="v" id="reply"></div></div>
+        <div class="row"><div class="k">Suggested customer response</div><div class="v" id="reply"></div></div>
         <div class="warning" id="review"></div>
       </div>
     </section>
 
     <aside class="card">
       <h2>2. Pilot dashboard</h2>
-      <p class="small">Illustrative metrics from the synthetic prototype dataset.</p>
+      <p class="dashboard-title" id="dashTitle"></p>
       <div class="metrics">
-        <div class="metric"><span class="small">Synthetic tickets</span><b>80</b></div>
-        <div class="metric"><span class="small">AI usage</span><b>~78%</b></div>
-        <div class="metric"><span class="small">Human overrides</span><b>tracked</b></div>
-        <div class="metric"><span class="small">Sensitive actions</span><b>human</b></div>
+        <div class="metric"><span class="label">Tickets in sample</span><b id="ticketCount"></b></div>
+        <div class="metric"><span class="label">AI-assisted</span><b id="aiAssist"></b></div>
+        <div class="metric"><span class="label">Human review</span><b id="humanReview"></b></div>
+        <div class="metric"><span class="label">Route target</span><b id="routeTarget"></b></div>
       </div>
-      <div class="section"><h2>Product metrics</h2><ul>
-        <li>Time to routed ticket</li><li>Routing accuracy</li><li>Human override rate</li><li>Resolution time</li><li>Backlog &gt;24h</li><li>Repeat-contact rate</li>
-      </ul></div>
-      <div class="section"><h2>Guardrails</h2><ul>
-        <li>No payment confirmation without source-system verification.</li>
-        <li>No refunds, credits or identity changes automatically.</li>
-        <li>Fraud, safety and unclear cases go to a human.</li>
-      </ul></div>
+
+      <div class="section">
+        <h3>What I would watch in a pilot</h3>
+        <ul class="metric-list" id="pilotMetrics"></ul>
+      </div>
+
+      <div class="section">
+        <h3>Control for this case</h3>
+        <p id="caseControl" style="margin:0"></p>
+      </div>
+      <p class="note">Illustrative values from the 80-ticket synthetic dataset. They are not Sun King operating metrics.</p>
     </aside>
   </div>
 
-  <section class="card section"><h2>Workflow</h2><div class="flow">Message → AI understanding → Structured ticket → Guardrail check → Human review when needed → Verified action → Event log → Adoption & operations analytics</div></section>
+  <section class="card handling">
+    <div class="handling-head">
+      <div><h2>How this case would be handled</h2></div>
+      <p>Support agent remains in control</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-no">STEP 1</div>
+        <h3>Case comes in</h3>
+        <p id="step1"></p>
+      </div>
+      <div class="step">
+        <div class="step-no">STEP 2</div>
+        <h3>Agent checks the first pass</h3>
+        <p id="step2"></p>
+      </div>
+      <div class="step">
+        <div class="step-no">STEP 3</div>
+        <h3>Right team takes action</h3>
+        <p id="step3"></p>
+      </div>
+      <div class="step">
+        <div class="step-no">STEP 4</div>
+        <h3>Close and learn</h3>
+        <p id="step4"></p>
+      </div>
+    </div>
+  </section>
 
-  <p class="foot">This browser demo uses simple deterministic rules so a reviewer can test it without API credentials. The repository also includes an optional LLM API implementation, SQL, tests, PRD, product brief and rollout plan.</p>
+  <p class="foot">This demo uses synthetic support cases and simple deterministic rules so it can be reviewed without credentials. A real pilot would validate routing rules, SLAs and guardrails with support, payments, service, logistics and risk teams before rollout.</p>
 </main>
+
 <script>
 const scenarios={
-  payment_missing:{market:'Kenya',channel:'WhatsApp',message:'Customer says: I paid by mobile money this morning but the payment is not showing and I did not receive the unlock code.'},
-  unlock_invalid:{market:'Uganda',channel:'Call notes',message:'Customer says the payment went through and an unlock code was received, but the code is showing invalid on the keypad and the system is still locked.'},
-  device_fault:{market:'Tanzania',channel:'WhatsApp',message:'Customer says the solar system stopped charging yesterday. The panel is in sunlight but the battery level stays at zero and there is no power at night.'},
-  safety_issue:{market:'Kenya',channel:'Call notes',message:'Customer reports that the battery became very hot and started producing smoke. They have switched the system off and are worried it may catch fire.'},
-  installation_delay:{market:'Nigeria',channel:'Ticketing tool',message:'Customer says installation was booked for yesterday, but the technician did not arrive and nobody called to reschedule. The customer has already paid the deposit.'},
-  profile_change:{market:'Kenya',channel:'Email',message:'Customer says the phone number linked to the account is no longer active and asks support to replace it with a new number so payment messages go to the correct phone.'},
-  balance_query:{market:'Uganda',channel:'WhatsApp',message:'Customer asks how much balance is left on the payment plan, what the next installment amount is, and when the next payment is due.'},
-  cash_dispute:{market:'Nigeria',channel:'Agent app',message:'Customer says they gave cash to a field agent two days ago and received a handwritten receipt, but the payment is still missing from the account and the product remains locked.'},
-  suspected_fraud:{market:'Kenya',channel:'WhatsApp',message:'Customer says a person claiming to be a Sun King agent asked them to send money to a personal mobile number. The customer suspects it may be a scam and wants the agent verified.'},
-  warranty_request:{market:'Uganda',channel:'Ticketing tool',message:'Customer says the battery was repaired last month but it has stopped working again. They want to know whether it is still under warranty and whether a replacement can be arranged.'},
-  delivery_issue:{market:'Tanzania',channel:'Email',message:'Customer received the solar kit today, but the package is missing the charging cable and one light. They want the missing items delivered.'},
-  agent_access:{market:'Myanmar',channel:'Agent app',message:'Field agent says they cannot log in to the agent app after changing phones. OTP verification keeps failing and they cannot register today\'s customer payments.'},
-  repeat_failure:{market:'Nigeria',channel:'Call notes',message:'Customer says the solar unit has failed for the third time even after two technician visits. They are frustrated and want the issue permanently resolved.'}
+  payment_missing:{
+    title:'Payment not reflected + no unlock code',market:'Kenya',channel:'WhatsApp',
+    message:'Customer says: I paid by mobile money this morning but the payment is not showing and I did not receive the unlock code.',
+    category:'Payment not reflected',priority:'High',owner:'Payments / Customer Operations',human:'Required',tickets:14,assist:'82%',route:'< 5 min',
+    action:'Check the transaction reference and payment ledger. Confirm whether the payment posted before resending or regenerating an access code.',
+    reply:'Thanks for reporting this. We will first verify the payment on the account. Once that is confirmed, the team can check the unlock-code status and take the next step.',
+    control:'Do not confirm a payment or issue an unlock code until the source payment record is verified.',
+    metrics:['Payment verification turnaround','Successful unlock after verified payment','Repeat contact within 24 hours']
+  },
+  unlock_invalid:{
+    title:'Unlock code received but invalid',market:'Uganda',channel:'Call notes',
+    message:'Customer says the payment went through and an unlock code was received, but the code is showing invalid on the keypad and the system is still locked.',
+    category:'Unlock code issue',priority:'High',owner:'Payments / Customer Operations',human:'Required',tickets:8,assist:'79%',route:'< 5 min',
+    action:'Verify the latest successful payment and code status, then resend a valid code or escalate a code-generation failure.',
+    reply:'Thanks for letting us know. We will check the latest successful payment and the code issued to the account before sending another code.',
+    control:'A new code should only be sent after payment and account status are confirmed.',
+    metrics:['Code validation time','Successful unlock after resend','Repeat contact for the same code issue']
+  },
+  device_fault:{
+    title:'Solar system stopped charging',market:'Tanzania',channel:'WhatsApp',
+    message:'Customer says the solar system stopped charging yesterday. The panel is in sunlight but the battery level stays at zero and there is no power at night.',
+    category:'Device / product issue',priority:'Medium',owner:'Service Operations',human:'Spot-check',tickets:11,assist:'72%',route:'< 15 min',
+    action:'Run basic troubleshooting, check service history and warranty status, and create a technician visit if the problem is not resolved.',
+    reply:'Thanks for the details. We will first check a few basic system points. If that does not solve it, the case can be moved to service for a technician visit.',
+    control:'The copilot can suggest troubleshooting, but it should not diagnose a hardware failure as certain without service confirmation.',
+    metrics:['First-contact troubleshooting success','Technician visit rate','Average resolution time']
+  },
+  safety_issue:{
+    title:'Battery smoke / safety concern',market:'Kenya',channel:'Call notes',
+    message:'Customer reports that the battery became very hot and started producing smoke. They have switched the system off and are worried it may catch fire.',
+    category:'Product safety issue',priority:'Urgent',owner:'Safety / Service Operations',human:'Required',tickets:3,assist:'35%',route:'Immediate',
+    action:'Tell the customer to stop using the product, keep it switched off and escalate immediately to the safety/service team.',
+    reply:'Thank you for reporting this. Please keep the system switched off and do not use it. The case is being escalated immediately so the service team can provide the next safe step.',
+    control:'Safety cases should leave the automated path immediately and be owned by a trained person.',
+    metrics:['Time to human pickup','Safety instruction acknowledged','Time to incident closure']
+  },
+  installation_delay:{
+    title:'Technician did not arrive',market:'Nigeria',channel:'Ticketing tool',
+    message:'Customer says installation was booked for yesterday, but the technician did not arrive and nobody called to reschedule. The customer has already paid the deposit.',
+    category:'Installation / service delay',priority:'Medium',owner:'Field Service Operations',human:'Spot-check',tickets:7,assist:'68%',route:'< 15 min',
+    action:'Check the appointment status, offer the next available slot and alert the field coordinator if the visit is overdue.',
+    reply:'Sorry the visit was missed. We will check the appointment status and arrange the next available installation slot.',
+    control:'Do not promise a new appointment time until field capacity is confirmed.',
+    metrics:['Missed-visit recovery time','Reschedule completion rate','Overdue appointments']
+  },
+  profile_change:{
+    title:'Customer wants phone number changed',market:'Kenya',channel:'Email',
+    message:'Customer says the phone number linked to the account is no longer active and asks support to replace it with a new number so payment messages go to the correct phone.',
+    category:'Customer details update',priority:'Medium',owner:'Customer Operations',human:'Required',tickets:4,assist:'48%',route:'< 10 min',
+    action:'Verify the customer using the approved identity process before changing any account details.',
+    reply:'We can help update the number after completing the required account verification. No profile change will be made before that check is complete.',
+    control:'Identity and profile changes require human verification before the account is edited.',
+    metrics:['Identity verification completion','Profile-update accuracy','Repeat contact after update']
+  },
+  balance_query:{
+    title:'Customer asks for remaining balance',market:'Uganda',channel:'WhatsApp',
+    message:'Customer asks how much balance is left on the payment plan, what the next installment amount is, and when the next payment is due.',
+    category:'Payment plan / balance query',priority:'Low',owner:'Customer Support',human:'Spot-check',tickets:9,assist:'91%',route:'< 30 min',
+    action:'Retrieve the verified balance and payment-plan data, then explain the next amount and due date in simple language.',
+    reply:'I can help with that. We will use the account payment record to confirm the remaining balance, next amount and due date before replying.',
+    control:'Financial figures must come from the account system, not from the language model.',
+    metrics:['Answer accuracy','First-contact resolution','Repeat balance enquiries']
+  },
+  cash_dispute:{
+    title:'Cash paid to agent but not recorded',market:'Nigeria',channel:'Agent app',
+    message:'Customer says they gave cash to a field agent two days ago and received a handwritten receipt, but the payment is still missing from the account and the product remains locked.',
+    category:'Cash payment dispute',priority:'High',owner:'Payments / Operations',human:'Required',tickets:5,assist:'42%',route:'< 5 min',
+    action:'Collect the receipt details, verify the agent and reconcile the cash record before making any payment or account adjustment.',
+    reply:'Thanks for sharing the details. We will verify the receipt, agent and payment record before making any change to the account.',
+    control:'No manual payment credit should be created from the message alone.',
+    metrics:['Receipt verification time','Cash reconciliation time','Escalation rate']
+  },
+  suspected_fraud:{
+    title:'Customer suspects a fake agent / scam',market:'Kenya',channel:'WhatsApp',
+    message:'Customer says a person claiming to be a Sun King agent asked them to send money to a personal mobile number. The customer suspects it may be a scam and wants the agent verified.',
+    category:'Suspected fraud',priority:'Urgent',owner:'Risk / Operations',human:'Required',tickets:3,assist:'30%',route:'Immediate',
+    action:'Tell the customer not to send additional money, preserve the details and escalate the case for agent and payment-channel verification.',
+    reply:'Thank you for flagging this. Please do not send any additional money until the details are verified. The case is being escalated for human review.',
+    control:'Fraud concerns should never be closed or resolved automatically.',
+    metrics:['Time to risk-team pickup','Cases verified','Further payment prevented']
+  },
+  warranty_request:{
+    title:'Battery failed again; warranty request',market:'Uganda',channel:'Ticketing tool',
+    message:'Customer says the battery was repaired last month but it has stopped working again. They want to know whether it is still under warranty and whether a replacement can be arranged.',
+    category:'Warranty / replacement request',priority:'Medium',owner:'Service Operations',human:'Required',tickets:5,assist:'55%',route:'< 15 min',
+    action:'Review warranty eligibility and previous repair history before deciding whether the next step is repair, replacement or further inspection.',
+    reply:'We will review the warranty status and the previous repair before confirming the next service or replacement step.',
+    control:'The prototype should not promise a replacement before warranty eligibility is checked.',
+    metrics:['Warranty decision time','Repair vs replacement cycle time','Repeat failure after service']
+  },
+  delivery_issue:{
+    title:'Delivery missing a component',market:'Tanzania',channel:'Email',
+    message:'Customer received the solar kit today, but the package is missing the charging cable and one light. They want the missing items delivered.',
+    category:'Delivery / missing component',priority:'Medium',owner:'Logistics / Customer Operations',human:'Spot-check',tickets:4,assist:'70%',route:'< 15 min',
+    action:'Confirm the order contents and delivery record, then raise a fulfillment request for any verified missing components.',
+    reply:'Thanks for reporting the missing items. We will check the order and delivery record first, then arrange the next fulfillment step for confirmed missing components.',
+    control:'Replacement fulfillment should be based on the order record rather than the customer message alone.',
+    metrics:['Missing-item confirmation time','Fulfillment turnaround','Repeat delivery contact']
+  },
+  agent_access:{
+    title:'Field agent cannot log in to app',market:'Myanmar',channel:'Agent app',
+    message:'Field agent says they cannot log in to the agent app after changing phones. OTP verification keeps failing and they cannot register today\'s customer payments.',
+    category:'Agent app / access issue',priority:'Medium',owner:'Internal Tools Support',human:'Spot-check',tickets:4,assist:'76%',route:'< 10 min',
+    action:'Check the agent account status and approved recovery steps, then escalate if OTP or device registration continues to fail.',
+    reply:'We will check the account and device-registration status first, then use the approved access-recovery process.',
+    control:'Access recovery should follow identity and account-security rules; credentials should never be generated in chat.',
+    metrics:['Login recovery time','Payments captured after recovery','Escalation rate']
+  },
+  repeat_failure:{
+    title:'Product failed repeatedly after service',market:'Nigeria',channel:'Call notes',
+    message:'Customer says the solar unit has failed for the third time even after two technician visits. They are frustrated and want the issue permanently resolved.',
+    category:'Repeat product failure',priority:'High',owner:'Service Operations',human:'Required',tickets:3,assist:'45%',route:'< 10 min',
+    action:'Review the complete service history and assign a human owner to decide the next corrective action instead of repeating the same troubleshooting path.',
+    reply:'This is a repeat issue, so the previous service history should be reviewed before another action is scheduled. A service owner should decide the next corrective step.',
+    control:'Repeat failures should be escalated to a person who can review prior actions and make a repair-versus-replacement decision.',
+    metrics:['Previous-history review completed','Permanent resolution rate','Repeat service visits']
+  }
 };
 
+function currentScenario(){return scenarios[document.getElementById('scenario').value]}
+
 function loadScenario(){
-  const s=scenarios[document.getElementById('scenario').value];
-  if(!s)return;
-  document.getElementById('market').value=s.market;
-  document.getElementById('channel').value=s.channel;
-  document.getElementById('message').value=s.message;
+  const s=currentScenario();
+  document.getElementById('marketText').textContent=s.market;
+  document.getElementById('channelText').textContent=s.channel;
+  document.getElementById('messageText').textContent=s.message;
+  document.getElementById('dashTitle').textContent=s.title;
+  document.getElementById('ticketCount').textContent=s.tickets+' / 80';
+  document.getElementById('aiAssist').textContent=s.assist;
+  document.getElementById('humanReview').textContent=s.human;
+  document.getElementById('routeTarget').textContent=s.route;
+  document.getElementById('caseControl').textContent=s.control;
+
+  const list=document.getElementById('pilotMetrics');
+  list.innerHTML='';
+  s.metrics.forEach(m=>{const li=document.createElement('li');li.textContent=m;list.appendChild(li)});
+
+  document.getElementById('step1').textContent=`The ${s.channel.toLowerCase()} message is captured with the ${s.market} market and basic case details.`;
+  document.getElementById('step2').textContent=s.human==='Required'
+    ? 'The support agent checks the suggested category and priority before any sensitive action is taken.'
+    : 'The support agent checks the suggested category and can accept or correct it before routing.';
+  document.getElementById('step3').textContent=`${s.owner} verifies the relevant records and owns the next action.`;
+  document.getElementById('step4').textContent='The final outcome, correction and resolution time are recorded so the team can improve the workflow.';
+
   document.getElementById('out').style.display='none';
 }
 
-function hasAny(t, xs){return xs.some(x=>t.includes(x))}
-function triage(){
-  const raw=document.getElementById('message').value.trim(); const t=raw.toLowerCase();
-  let cat='Other / needs review', pri='Medium', owner='Customer Operations', human=true;
-  let action='Ask one clarifying question, then route to the relevant operations owner. Do not take account-changing action automatically.';
-  let reply='Thanks for reporting this. I have captured the issue and routed it to the right team. We will first verify the relevant account or payment details before making any changes.';
-
-  if(hasAny(t,['smoke','fire','burning','sparks','very hot','overheating'])){
-    cat='Product safety issue';pri='Urgent';owner='Safety / Service Operations';human=true;
-    action='Tell the customer to stop using the product, keep a safe distance if needed, and escalate immediately to the safety/service team for verified next steps.';
-    reply='Thank you for reporting this. Please stop using the system and keep it switched off. I am escalating this as a safety issue so the service team can contact you with the next safe step.';
-  }
-  else if(hasAny(t,['fraud','stolen','agent took','cash missing','scam','personal mobile number','fake agent'])){
-    cat='Payment / risk concern';pri='Urgent';owner='Risk / Operations';human=true;
-    action='Pause automation, preserve the case details and payment evidence, verify the agent/account, and escalate for human investigation.';
-    reply='Thank you for flagging this. Please do not send any additional money until the details are verified. I have escalated the case for human review.';
-  }
-  else if(hasAny(t,['payment','paid','m-pesa','mpesa','mobile money','cash','deposit']) && hasAny(t,['not showing','not reflect','not updated','still locked','missing','no unlock','did not receive'])){
-    cat='Payment not reflected';pri='High';owner='Payments / Customer Operations';human=true;
-    action='Check the transaction reference and payment ledger. Confirm whether the payment posted. Only then resend or regenerate any access code.';
-  }
-  else if(hasAny(t,['unlock','code','token','keypad']) && hasAny(t,['not received','invalid','not working','no code','still locked'])){
-    cat='Unlock code issue';pri='High';owner='Payments / Customer Operations';human=true;
-    action='Verify the latest successful payment and code status, then resend a valid code or escalate generation failure.';
-  }
-  else if(hasAny(t,['battery','solar','panel','light','device','system','unit']) && hasAny(t,['third time','again','repeated','two technician'])){
-    cat='Repeat product failure';pri='High';owner='Service Operations';human=true;
-    action='Review prior service history, avoid repeating the same troubleshooting path, and assign a human owner to decide repair versus replacement.';
-    reply='I can see this is a repeat issue. The case should be reviewed with the previous service history so the team can decide the next corrective action instead of repeating the same steps.';
-  }
-  else if(hasAny(t,['battery','solar','panel','light','device','system','unit']) && hasAny(t,['not working','stopped','broken','no power','not charging','zero'])){
-    cat='Device / product issue';pri='Medium';owner='Service Operations';human=false;
-    action='Run basic troubleshooting, verify service/warranty status, and create a technician visit if unresolved.';
-  }
-  else if(hasAny(t,['warranty','replacement','replace']) && hasAny(t,['battery','device','system','repair','working'])){
-    cat='Warranty / replacement request';pri='Medium';owner='Service Operations';human=true;
-    action='Verify warranty eligibility and previous repair history before approving any replacement or service commitment.';
-  }
-  else if(hasAny(t,['delivery','package','kit']) && hasAny(t,['missing','not included','did not receive'])){
-    cat='Delivery / missing component';pri='Medium';owner='Logistics / Customer Operations';human=false;
-    action='Confirm the order contents and delivery record, then raise a fulfillment request for verified missing components.';
-    reply='Thanks for reporting the missing item. We will check the order and delivery record first, then arrange the next fulfillment step for any confirmed missing component.';
-  }
-  else if(hasAny(t,['install','technician','service','visit']) && hasAny(t,['delay','waiting','did not arrive','did not come','pending','reschedule'])){
-    cat='Installation / service delay';pri='Medium';owner='Field Service Operations';human=false;
-    action='Check appointment status, propose the next available slot, and alert the field coordinator if overdue.';
-  }
-  else if(hasAny(t,['agent','app','login','otp','password','sync']) && hasAny(t,['cannot','failed','locked','error','unable','not'])){
-    cat='Agent app / access issue';pri='Medium';owner='Internal Tools Support';human=false;
-    action='Validate agent account status, attempt approved recovery, and escalate persistent authentication or sync errors.';
-  }
-  else if(hasAny(t,['phone','number','name','contact','details']) && hasAny(t,['change','update','wrong','new','replace'])){
-    cat='Customer details update';pri='Medium';owner='Customer Operations';human=true;
-    action='Verify customer identity using the approved process before changing profile data.';
-    reply='I can help route this request, but the account owner must first be verified before any contact details are changed.';
-  }
-  else if(hasAny(t,['balance','remaining','installment','instalment','payoff','due','next payment'])){
-    cat='Payment plan / balance query';pri='Low';owner='Customer Support';human=false;
-    action='Retrieve verified balance and payment-plan data, then explain the next amount and date in simple language.';
-    reply='I can help with that. The next step is to retrieve the verified payment-plan details and then confirm the remaining balance, next amount and due date.';
-  }
-
-  document.getElementById('summary').textContent=raw.length>180?raw.slice(0,180)+'…':raw;
-  document.getElementById('category').textContent=cat;
-  document.getElementById('priority').textContent=pri;
-  document.getElementById('owner').textContent=owner;
-  document.getElementById('action').textContent=action;
-  document.getElementById('reply').textContent=reply;
-  document.getElementById('review').textContent=human?'Human review required before sensitive, safety, financial or account-changing action.':'Copilot suggestion can be reviewed and accepted by the support user.';
+function reviewCase(){
+  const s=currentScenario();
+  document.getElementById('category').textContent=s.category;
+  document.getElementById('priority').textContent=s.priority;
+  document.getElementById('owner').textContent=s.owner;
+  document.getElementById('action').textContent=s.action;
+  document.getElementById('reply').textContent=s.reply;
+  document.getElementById('review').textContent=s.human==='Required'
+    ? 'Human review required before the case can move to a sensitive or account-changing action.'
+    : 'Support agent reviews the suggestion and can accept or correct it before routing.';
   document.getElementById('out').style.display='block';
 }
+
 loadScenario();
-triage();
-</script></body></html>
+</script>
+</body>
+</html>
