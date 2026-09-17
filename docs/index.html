@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PAYG Ops Copilot — Prototype</title>
+  <style>
+    :root { --bg:#f7f7f4; --card:#ffffff; --ink:#1f2937; --muted:#667085; --line:#e5e7eb; --accent:#f4b400; --warn:#fff7df; }
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+    .wrap{max-width:1050px;margin:0 auto;padding:32px 20px 64px}.top{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+    h1{margin:0 0 6px;font-size:32px}.sub{color:var(--muted);margin:0}.badge{background:#fff2bd;border:1px solid #efd267;padding:8px 10px;border-radius:8px;font-size:13px}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+    label{font-weight:700;font-size:14px;display:block;margin:12px 0 6px}textarea,select{width:100%;border:1px solid #cfd4dc;border-radius:8px;padding:10px;font:inherit;background:#fff}
+    textarea{min-height:130px;resize:vertical}button{margin-top:14px;background:#1f2937;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:700;cursor:pointer}
+    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{border:1px solid var(--line);border-radius:8px;padding:12px}.metric b{display:block;font-size:20px;margin-top:5px}.small{font-size:12px;color:var(--muted)}
+    .out{margin-top:16px;display:none}.row{border-top:1px solid var(--line);padding:10px 0}.row:first-child{border-top:0}.k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.v{margin-top:4px}
+    .warning{background:var(--warn);border:1px solid #efd267;padding:10px;border-radius:8px;margin-top:10px}.section{margin-top:18px}.section h2{font-size:20px;margin:0 0 10px}.flow{font-family:monospace;background:#111827;color:#f9fafb;padding:14px;border-radius:8px;white-space:pre-wrap;font-size:13px}
+    .foot{margin-top:28px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}.top{display:block}.badge{margin-top:12px}.metrics{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body><main class="wrap">
+  <div class="top"><div><h1>PAYG Ops Copilot</h1><p class="sub">AI-first support triage + operations workflow prototype</p></div><div class="badge">Independent case study · Synthetic data only</div></div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>1. Triage an incoming message</h2>
+      <label for="market">Market</label>
+      <select id="market"><option>Kenya</option><option>Uganda</option><option>Nigeria</option><option>Tanzania</option><option>Myanmar</option></select>
+      <label for="channel">Channel</label>
+      <select id="channel"><option>WhatsApp</option><option>Ticketing tool</option><option>Email</option><option>Call notes</option><option>Agent app</option></select>
+      <label for="message">Message</label>
+      <textarea id="message">Customer says: I paid by mobile money this morning but the payment is not showing and I did not receive the unlock code.</textarea>
+      <button onclick="triage()">Triage message</button>
+      <div class="out" id="out">
+        <div class="row"><div class="k">Summary</div><div class="v" id="summary"></div></div>
+        <div class="row"><div class="k">Category / priority</div><div class="v"><span id="category"></span> · <b id="priority"></b></div></div>
+        <div class="row"><div class="k">Owner</div><div class="v" id="owner"></div></div>
+        <div class="row"><div class="k">Recommended next action</div><div class="v" id="action"></div></div>
+        <div class="row"><div class="k">Draft response</div><div class="v" id="reply"></div></div>
+        <div class="warning" id="review"></div>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>2. Pilot dashboard</h2>
+      <p class="small">Illustrative metrics from the synthetic prototype dataset.</p>
+      <div class="metrics">
+        <div class="metric"><span class="small">Synthetic tickets</span><b>80</b></div>
+        <div class="metric"><span class="small">AI usage</span><b>~78%</b></div>
+        <div class="metric"><span class="small">Human overrides</span><b>tracked</b></div>
+        <div class="metric"><span class="small">Sensitive actions</span><b>human</b></div>
+      </div>
+      <div class="section"><h2>Product metrics</h2><ul>
+        <li>Time to routed ticket</li><li>Routing accuracy</li><li>Human override rate</li><li>Resolution time</li><li>Backlog &gt;24h</li><li>Repeat-contact rate</li>
+      </ul></div>
+      <div class="section"><h2>Guardrails</h2><ul>
+        <li>No payment confirmation without source-system verification.</li>
+        <li>No refunds, credits or identity changes automatically.</li>
+        <li>Fraud, safety and unclear cases go to a human.</li>
+      </ul></div>
+    </aside>
+  </div>
+
+  <section class="card section"><h2>Workflow</h2><div class="flow">Message → AI understanding → Structured ticket → Guardrail check → Human review when needed → Verified action → Event log → Adoption & operations analytics</div></section>
+
+  <p class="foot">This browser demo uses simple deterministic rules so a reviewer can test it without API credentials. The repository also includes an optional LLM API implementation, SQL, tests, PRD, product brief and rollout plan.</p>
+</main>
+<script>
+function hasAny(t, xs){return xs.some(x=>t.includes(x))}
+function triage(){
+  const raw=document.getElementById('message').value.trim(); const t=raw.toLowerCase();
+  let cat='Other / needs review', pri='Medium', owner='Customer Operations', human=true;
+  let action='Ask one clarifying question, then route to the relevant operations owner. Do not take account-changing action automatically.';
+  if(hasAny(t,['fraud','stolen','agent took','cash missing','scam'])){cat='Payment / risk concern';pri='Urgent';owner='Risk / Operations';human=true;action='Pause automation, preserve the case details, and escalate for human investigation.'}
+  else if(hasAny(t,['payment','paid','m-pesa','mpesa','mobile money','cash']) && hasAny(t,['not showing','not reflect','not updated','still locked','missing','code'])){cat='Payment not reflected';pri='High';owner='Payments / Customer Operations';human=true;action='Check the transaction reference and payment ledger. Confirm whether the payment posted. Only then resend/regenerate any access code.'}
+  else if(hasAny(t,['unlock','code','token','keypad']) && hasAny(t,['not received','invalid','not working','no code'])){cat='Unlock code issue';pri='High';owner='Payments / Customer Operations';human=true;action='Verify the latest successful payment and code status, then resend a valid code or escalate generation failure.'}
+  else if(hasAny(t,['solar','battery','panel','light','device','system']) && hasAny(t,['not working','stopped','broken','no power','not charging'])){cat='Device / product issue';pri='Medium';owner='Service Operations';human=false;action='Run basic troubleshooting, verify service/warranty status, and create a technician visit if unresolved.'}
+  else if(hasAny(t,['install','technician','service','visit']) && hasAny(t,['delay','waiting','did not come','pending','reschedule'])){cat='Installation / service delay';pri='Medium';owner='Field Service Operations';human=false;action='Check appointment status, propose the next available slot, and alert the field coordinator if overdue.'}
+  else if(hasAny(t,['agent','app','login','otp','password','sync']) && hasAny(t,['cannot','failed','locked','error','unable','not'])){cat='Agent app / access issue';pri='Medium';owner='Internal Tools Support';human=false;action='Validate agent account status, attempt approved recovery, and escalate persistent authentication or sync errors.'}
+  else if(hasAny(t,['phone','number','name','contact','details']) && hasAny(t,['change','update','wrong','new'])){cat='Customer details update';pri='Medium';owner='Customer Operations';human=true;action='Verify customer identity using the approved process before changing profile data.'}
+  else if(hasAny(t,['balance','remaining','installment','instalment','payoff','due'])){cat='Payment plan / balance query';pri='Low';owner='Customer Support';human=false;action='Retrieve verified balance and payment-plan data, then explain the next amount/date in simple language.'}
+  document.getElementById('summary').textContent=raw.length>180?raw.slice(0,180)+'…':raw;
+  document.getElementById('category').textContent=cat; document.getElementById('priority').textContent=pri; document.getElementById('owner').textContent=owner; document.getElementById('action').textContent=action;
+  document.getElementById('reply').textContent='Thanks for reporting this. I have captured the issue and routed it to the right team. We will first verify the relevant account or payment details before making any changes.';
+  document.getElementById('review').textContent=human?'Human review required before sensitive or account-changing action.':'Copilot suggestion can be reviewed and accepted by the support user.';
+  document.getElementById('out').style.display='block';
+}
+triage();
+</script></body></html>
